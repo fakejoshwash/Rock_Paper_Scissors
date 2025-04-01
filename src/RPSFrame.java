@@ -8,6 +8,7 @@ public class RPSFrame extends JFrame implements Strategy {
     final int PAPER = 1;
     final int SCISSORS = 2;
     String outcomeMessage;
+    String stratMessage = "";
     int cpuMove;
     int usedLast;
     int rockUsed = 0;
@@ -31,17 +32,19 @@ public class RPSFrame extends JFrame implements Strategy {
         JPanel playerScoreHold = new JPanel();
         JPanel cpuScoreHold = new JPanel();
         JPanel buttonsPanel = new JPanel();
+        JPanel centerPanel = new JPanel(new BorderLayout());
         JPanel matchPanel = new JPanel(new BorderLayout(0, 0));
         JPanel subMatchPlayer = new JPanel();
         JPanel subMatchCpu = new JPanel();
         playerScoreHold.setBackground(Color.darkGray);
         cpuScoreHold.setBackground(Color.darkGray);
-        matchPanel.setBorder(new EmptyBorder(50, 20, 50, 20));
+        matchPanel.setBorder(new EmptyBorder(50, 20, 40, 20));
         scorePanel.setBackground(Color.darkGray);
         buttonsPanel.setPreferredSize(new Dimension(buttonsPanel.getWidth(), 85));
         buttonsPanel.setAlignmentY(2f);
-        buttonsPanel.setBackground(Color.cyan);
+        buttonsPanel.setBackground(Color.lightGray);
         buttonsPanel.setBorder(BorderFactory.createLoweredBevelBorder());
+        centerPanel.setBackground(Color.pink);
         matchPanel.setBackground(Color.pink);
         subMatchPlayer.setBackground(Color.pink);
         subMatchCpu.setBackground(Color.pink);
@@ -50,6 +53,7 @@ public class RPSFrame extends JFrame implements Strategy {
         Font scoreFont = new Font("Arial", Font.BOLD, 36);
         Font matchFont = new Font("Arial", Font.BOLD, 24);
         Font outcomeFont = new Font("Arial", Font.BOLD, 18);
+        Font stratFont = new Font("Arial", Font.ITALIC, 12);
         JLabel playerScoreLabel = new JLabel("Player score");
         playerScoreLabel.setForeground(Color.lightGray);
         JLabel cpuScoreLabel = new JLabel("Computer score");
@@ -76,6 +80,9 @@ public class RPSFrame extends JFrame implements Strategy {
         JLabel outcomeLabel = new JLabel("", SwingConstants.CENTER);
         outcomeLabel.setFont(outcomeFont);
         outcomeLabel.setForeground(Color.blue);
+        JLabel stratUsedLabel = new JLabel(stratMessage, SwingConstants.CENTER);
+        stratUsedLabel.setFont(stratFont);
+        stratUsedLabel.setForeground(Color.gray);
         ImageIcon rockIcon = new ImageIcon("src/rock.png");
         ImageIcon paperIcon = new ImageIcon("src/paper.png");
         ImageIcon scissorsIcon = new ImageIcon("src/scissors.png");
@@ -91,6 +98,7 @@ public class RPSFrame extends JFrame implements Strategy {
             cpuScoreDisplay.setText(String.valueOf(cpuScore));
             tiesTotalDisplay.setText(String.valueOf(tiesTotal));
             outcomeLabel.setText(outcomeMessage);
+            stratUsedLabel.setText(stratMessage);
         });
         JButton paperButton = new JButton(paperIcon);
         paperButton.setText("Paper");
@@ -104,6 +112,7 @@ public class RPSFrame extends JFrame implements Strategy {
             cpuScoreDisplay.setText(String.valueOf(cpuScore));
             tiesTotalDisplay.setText(String.valueOf(tiesTotal));
             outcomeLabel.setText(outcomeMessage);
+            stratUsedLabel.setText(stratMessage);
         });
         JButton scissorsButton = new JButton(scissorsIcon);
         scissorsButton.setText("Scissors");
@@ -117,6 +126,7 @@ public class RPSFrame extends JFrame implements Strategy {
             cpuScoreDisplay.setText(String.valueOf(cpuScore));
             tiesTotalDisplay.setText(String.valueOf(tiesTotal));
             outcomeLabel.setText(outcomeMessage);
+            stratUsedLabel.setText(stratMessage);
         });
         JButton quitButton = new JButton("Quit");
         quitButton.addActionListener(_ -> System.exit(0));
@@ -124,7 +134,7 @@ public class RPSFrame extends JFrame implements Strategy {
         // JPanelception
         container.add(buttonsPanel, BorderLayout.SOUTH);
         container.add(scorePanel, BorderLayout.NORTH);
-        container.add(matchPanel, BorderLayout.CENTER);
+        container.add(centerPanel, BorderLayout.CENTER);
         scorePanel.add(playerScoreHold, BorderLayout.WEST);
         scorePanel.add(tiesTotalDisplay, BorderLayout.CENTER);
         scorePanel.add(cpuScoreHold, BorderLayout.EAST);
@@ -132,6 +142,8 @@ public class RPSFrame extends JFrame implements Strategy {
         playerScoreHold.add(playerScoreLabel);
         cpuScoreHold.add(cpuScoreLabel);
         cpuScoreHold.add(cpuScoreDisplay);
+        centerPanel.add(matchPanel, BorderLayout.CENTER);
+        centerPanel.add(stratUsedLabel, BorderLayout.SOUTH);
         matchPanel.add(subMatchPlayer, BorderLayout.NORTH);
         matchPanel.add(subMatchCpu, BorderLayout.CENTER);
         matchPanel.add(outcomeLabel, BorderLayout.SOUTH);
@@ -139,13 +151,6 @@ public class RPSFrame extends JFrame implements Strategy {
         subMatchPlayer.add(playerMoveDisplay);
         subMatchCpu.add(cpuMoveLabel);
         subMatchCpu.add(cpuMoveDisplay);
-        /*
-        matchPanel.add(playerMoveLabel, BorderLayout.NORTH);
-        matchPanel.add(playerMoveDisplay, BorderLayout.NORTH);                  // atp use different panels for the match display
-        matchPanel.add(cpuMoveLabel, BorderLayout.CENTER);
-
-
-         */
         buttonsPanel.add(rockButton);
         buttonsPanel.add(paperButton);
         buttonsPanel.add(scissorsButton);
@@ -196,8 +201,7 @@ public class RPSFrame extends JFrame implements Strategy {
         } else {
             move = ROCK;
         }
-        System.out.println("I SMITE YE!");
-        System.out.println(move);
+        stratMessage = "Cheated :)";
         return move;
     }
 
@@ -224,8 +228,7 @@ public class RPSFrame extends JFrame implements Strategy {
                 move = SCISSORS;
             }
         }
-
-        System.out.println("least used: " + move);
+        stratMessage = "Least used";
         return move;
     }
 
@@ -240,20 +243,20 @@ public class RPSFrame extends JFrame implements Strategy {
         } else {
             move = SCISSORS;
         }
-        System.out.println("most used: " + move);
+        stratMessage = "Most used";
         return move;
     }
 
     @Override
     public int mystery() {
         int move = rng.nextInt(3);
-        System.out.println("random: " + move);
+        stratMessage = "Random";
         return move;
     }
 
     @Override
     public int usedLast(int usedLast) {
-        System.out.println("last used: " + usedLast);
+        stratMessage = "Used last";
         return usedLast;
     }
 
